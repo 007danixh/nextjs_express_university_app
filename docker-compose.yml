@@ -1,0 +1,27 @@
+version: '3'
+services:
+  # Backend API Service
+  api:
+    build:
+      context: ./api
+    ports:
+      - "5000:5000"  # Expose API on port 5000
+    depends_on:
+      - mongo  # Make sure MongoDB is started before the API
+
+  # MongoDB Service
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # Expose MongoDB on port 27017
+    volumes:
+      - ./data:/data/db  # Mount a volume for MongoDB data
+
+  # Frontend Service
+  frontend:
+    build:
+      context: ./next_js_university_app
+    ports:
+      - "3000:3000"  # Expose Next.js app on port 3000
+    depends_on:
+      - api  # Make sure the API is started before the frontend
